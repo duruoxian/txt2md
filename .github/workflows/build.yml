@@ -1,0 +1,77 @@
+name: build
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller
+
+      - name: Build unsigned exe
+        run: |
+          python make_icon.py
+          python -m PyInstaller --noconfirm --clean --onefile --windowed `
+            --name txt2md --icon icon.ico `
+            --collect-all customtkinter --hidden-import pystray._win32 app.py
+          copy prompt.md dist\prompt.md
+          copy config.example.json dist\config.example.json
+
+      - name: Upload unsigned artifact
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned
+          path: dist/
+
+      # ---- 免费签名：SignPath Foundation ----
+      # 申请通过后，在仓库 Settings → Secrets 里配置：
+      #   SIGNPATH_API_TOKEN, SIGNPATH_ORGANIZATION_ID
+      # 并把下面的 project-slug / signing-policy-slug / artifact-configuration-slug
+      # 换成 SignPath 后台里显示的值。
+      - name: Submit signing request (SignPath)
+        if: ${{ vars.SIGNPATH_ENABLED == 'true' }}
+        uses: signpath/github-action-submit-signing-request@v1
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: "txt2md"
+          signing-policy-slug: "release-signing"
+          github-artifact-id: ${{ steps.upload.outputs.artifact-id }}
+          artifact-configuration-slug: "txt2md"
+          wait-for-completion: true
+          output-artifact-directory: signed
+
+      - name: Upload signed artifact
+        if: ${{ vars.SIGNPATH_ENABLED == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: signed
+          path: signed/
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/txt2md.exe
+            dist/prompt.md
+            dist/config.example.json
+            signed/**

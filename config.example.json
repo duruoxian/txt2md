@@ -1,0 +1,12 @@
+{
+  "watch_list": [
+    { "path": "D:\\study\\该学期分组以及任务.txt", "type": "file" }
+  ],
+  "api_base": "https://api.deepseek.com",
+  "model": "deepseek-chat",
+  "api_key": "",
+  "debounce_seconds": 2,
+  "theme": "System",
+  "max_file_bytes": 1048576,
+  "exclude_dirs": [".git", "node_modules", ".venv", "venv", "__pycache__", ".idea", ".vscode"]
+}

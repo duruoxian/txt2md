@@ -1,0 +1,22 @@
+# 构建产物
+dist/
+build/
+*.spec
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 运行时生成（含个人 API Key，切勿提交）
+config.json
+sync.log
+*.md.bak
+*.md.tmp
+
+# 本地发布包
+release/
+*.zip
+
+# 编辑器
+.idea/
+.vscode/
