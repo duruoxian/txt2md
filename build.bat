@@ -10,6 +10,7 @@ echo [2/3] 打包 txt2md.exe ...
 py -3 -m PyInstaller --noconfirm --clean --onefile --windowed ^
   --name txt2md ^
   --icon icon.ico ^
+  --version-file version_info.txt ^
   --collect-all customtkinter ^
   --hidden-import pystray._win32 ^
   app.py || goto :err

@@ -61,20 +61,25 @@ py -3 app.py
 pip install -r requirements.txt pyinstaller
 python make_icon.py
 python -m PyInstaller --noconfirm --clean --onefile --windowed ^
-  --name txt2md --icon icon.ico ^
+  --name txt2md --icon icon.ico --version-file version_info.txt ^
   --collect-all customtkinter --hidden-import pystray._win32 app.py
 ```
 或直接双击 `build.bat`。CI 构建见 `.github/workflows/build.yml`。
 
-## 代码签名（开源免费）
-本项目使用开源许可证（MIT）。未签名的 exe 会被 Windows 智能应用控制(SAC)拦截。
-免费签名渠道：
+## Code signing policy
 
-1. **SignPath Foundation**（推荐）：为开源项目免费提供证书，私钥存于 HSM，
-   在 CI 中自动签名（信誉由基金会背书）。申请 <https://signpath.org/>，
-   通过后在仓库 Secrets 配置 `SIGNPATH_API_TOKEN`、`SIGNPATH_ORGANIZATION_ID`，
-   并设置仓库变量 `SIGNPATH_ENABLED=true`，工作流即会自动签名。
-2. **Certum - Open Source Code Signing**：面向开源开发者的免费 1 年期证书。
+Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
+- Committers and reviewers: [duruoxian](https://github.com/duruoxian)
+- Approvers: [duruoxian](https://github.com/duruoxian)
+
+See [CODE_SIGNING_POLICY.md](CODE_SIGNING_POLICY.md) for the full policy and build/signing process.
+Binaries are built by GitHub Actions from this repository's source, then signed by SignPath.io.
+
+## 隐私政策
+见 [PRIVACY.md](PRIVACY.md)。摘要：
+This program will not transfer any information to other networked systems unless
+specifically requested by the user or the person installing or operating it.
 
 ## 许可证
 MIT，见 `LICENSE`。

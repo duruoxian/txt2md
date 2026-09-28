@@ -29,7 +29,7 @@ jobs:
         run: |
           python make_icon.py
           python -m PyInstaller --noconfirm --clean --onefile --windowed `
-            --name txt2md --icon icon.ico `
+            --name txt2md --icon icon.ico --version-file version_info.txt `
             --collect-all customtkinter --hidden-import pystray._win32 app.py
           copy prompt.md dist\prompt.md
           copy config.example.json dist\config.example.json
