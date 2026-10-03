@@ -1,5 +1,7 @@
 # TXT → MD（LocalSend 风格便携版）
 
+> 📖 本项目的介绍文章：<https://duruoxian-blog.pages.dev/posts/txt2md>
+
 把你随手写的 `.txt` 笔记用 AI 重排成排版美观的 `.md`，支持后台自动更新和托盘手动转换。
 
 ## ⬇️ 下载使用
